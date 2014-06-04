@@ -5,6 +5,7 @@ class UsersController extends BaseController
 
     public function postRegister()
     {
+        Log::info('[' . Request::getClientIp() . '] [incoming] ' . Input::all());
         $mobile_number = Input::get('mobile_number'); //98473793
         $country_code = Input::get('country_code');
         $imei = Input::get('imei'); //357529348654732
