@@ -24,10 +24,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $hidden = array('created_at', 'updated_at');
     protected $fillable = array('mobile_number', 'country_code', 'country');
 
-    public function scopeGetUser($query, $country_code, $mobile_number)
-    {
-        return $query->whereCountryCode($country_code)->whereMobileNumber($mobile_number);
-    }
-
-
+//    public function scopeGetUser($query, $country_code, $mobile_number)
+//    {
+//        return $query->whereCountryCode($country_code)->whereMobileNumber($mobile_number);
+//    }
 }
