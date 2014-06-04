@@ -17,6 +17,7 @@ Route::get('/', function()
 });
 
 Route::controller('user','UsersController');
+Route::controller('verifications', 'VerificationsController');
 
 /*
 Route::group(array('prefix' => ''), function () {
