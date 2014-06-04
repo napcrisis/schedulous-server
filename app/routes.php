@@ -16,7 +16,7 @@ Route::get('/', function()
 	return View::make('hello');
 });
 
-Route::controller('register','UsersController');
+Route::controller('user','UsersController');
 
 /*
 Route::group(array('prefix' => ''), function () {
