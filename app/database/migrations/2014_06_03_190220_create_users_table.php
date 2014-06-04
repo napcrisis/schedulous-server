@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration {
 		{
 			$table->increments('id');
             $table->integer('mobile_number')->unsigned();
+            $table->string('country_code');
             $table->string('imei');
             $table->string('name');
             $table->string('profile_pic');
