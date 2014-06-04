@@ -15,3 +15,23 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+Route::contoller('register','UserController');
+
+/*
+Route::group(array('prefix' => ''), function () {
+    Route::group(array('before' => 'all_mobile_traffic_filter'), function () {
+        Route::controller('authentication', 'AuthenticationController'); // for users to login to facebook => postFacebook
+        Route::group(array('before' => 'authenticated_traffic_filter'), function () {
+            Route::controller('group', 'GroupController');
+            Route::controller('user', 'UserController');
+            Route::controller('gcm', 'GCMController');
+            Route::controller('outings', 'OutingsController');
+            Route::controller('snowtrails', 'SnowtrailsController');
+            Route::controller('vendors', 'VendorsController');
+//			Route::controller('timetable', 'TimetablesController');
+        });
+    });
+});
+*/
+
