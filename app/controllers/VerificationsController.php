@@ -23,6 +23,7 @@ class VerificationsController extends BaseController
         $stored_id = $stored_result[0]->id;
 
         if (strcmp($stored_code, $verification_code) == 0) {
+            Verification::where('id','=',$stored_id)->update(array('verified'=>'true'));
             Verification::find($stored_id)->delete();
             return array('status'=>'success','message'=>'verified');
         }
