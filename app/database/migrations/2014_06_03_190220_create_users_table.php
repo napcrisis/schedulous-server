@@ -14,13 +14,14 @@ class CreateUsersTable extends Migration {
 	{
 		Schema::create('users', function(Blueprint $table)
 		{
+            $table->increments('user_id');
             $table->string('country_code');
-            $table->string('mobile_number');
+            $table->string('mobile_number')->unique();
             $table->string('name');
             $table->string('profile_pic');
             $table->string('country');
+            $table->string('referral_code')->unique();
             $table->timestamps();
-            $table->primary(array('country_code', 'mobile_number'));
         });
 	}
 

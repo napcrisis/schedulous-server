@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\SoftDeletingTrait;
 class Verification extends Eloquent
 {
     use SoftDeletingTrait;
+    protected $softDelete = true; 
 
     // Add your validation rules here
     public static $rules = [
@@ -12,8 +13,13 @@ class Verification extends Eloquent
     ];
 
     // Don't forget to fill this array
-    protected $fillable = array('mobile_number', 'country_code', 'country', 'device_name', 'code');
+    protected $fillable = array('user_id', 'device_model', 'code', 'verified');
 
     protected $dates = ['deleted_at'];
+
+    public function user()
+    {
+        return $this->belongsTo('User');
+    }
 
 }

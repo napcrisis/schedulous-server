@@ -11,15 +11,27 @@
 |
 */
 
-App::before(function($request)
-{
-	//
+App::before(function ($request) {
+    $request_uri = $request->getRequestUri();
+    $input = Input::all();
+    Log::info('[' . Request::getClientIp() . '] ' . $request->url() . ' ' . json_encode($input));
+    /*
+    $fp = fopen("/path/to/private.key", "r");
+    $priv_key = fread($fp, 8192);
+    fclose($fp);
+    // $passphrase is required if your key is encoded (suggested)
+    $res = openssl_get_privatekey($priv_key, $passphrase);
+
+     * NOTE:  Here you use the returned resource value
+
+    openssl_private_decrypt($crypttext,$newsource,$res);
+    */
+
 });
 
 
-App::after(function($request, $response)
-{
-	//
+App::after(function ($request, $response) {
+    //
 });
 
 /*
@@ -33,25 +45,19 @@ App::after(function($request, $response)
 |
 */
 
-Route::filter('auth', function()
-{
-	if (Auth::guest())
-	{
-		if (Request::ajax())
-		{
-			return Response::make('Unauthorized', 401);
-		}
-		else
-		{
-			return Redirect::guest('login');
-		}
-	}
+Route::filter('auth', function () {
+    if (Auth::guest()) {
+        if (Request::ajax()) {
+            return Response::make('Unauthorized', 401);
+        } else {
+            return Redirect::guest('login');
+        }
+    }
 });
 
 
-Route::filter('auth.basic', function()
-{
-	return Auth::basic();
+Route::filter('auth.basic', function () {
+    return Auth::basic();
 });
 
 /*
@@ -65,9 +71,8 @@ Route::filter('auth.basic', function()
 |
 */
 
-Route::filter('guest', function()
-{
-	if (Auth::check()) return Redirect::to('/');
+Route::filter('guest', function () {
+    if (Auth::check()) return Redirect::to('/');
 });
 
 /*
@@ -81,10 +86,8 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
-{
-	if (Session::token() != Input::get('_token'))
-	{
-		throw new Illuminate\Session\TokenMismatchException;
-	}
+Route::filter('csrf', function () {
+    if (Session::token() != Input::get('_token')) {
+        throw new Illuminate\Session\TokenMismatchException;
+    }
 });

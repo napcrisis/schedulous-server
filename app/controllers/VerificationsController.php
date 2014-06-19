@@ -3,18 +3,18 @@
 class VerificationsController extends BaseController
 {
 
-    public static function verify($country_code, $mobile_number, $device_name, $verification_code)
+    public static function verify($country_code, $mobile_number, $device_model, $verification_code)
     {
         $stored_result = Verification::where("country_code", "=", $country_code)
             ->where("mobile_number", "=", $mobile_number)
-            ->where('device_name', '=', $device_name)
+            ->where('device_model', '=', $device_model)
             ->get(array('id', 'code'));
 
 //        echo $stored_result; exit;
 
-        if(count($stored_result)!=0)    {
+        if (count($stored_result) != 0) {
             goto verify;
-        }   else{
+        } else {
             goto forced_url;
         }
 
@@ -23,14 +23,14 @@ class VerificationsController extends BaseController
         $stored_id = $stored_result[0]->id;
 
         if (strcmp($stored_code, $verification_code) == 0) {
-            Verification::where('id','=',$stored_id)->update(array('verified'=>'true'));
+            Verification::where('id', '=', $stored_id)->update(array('verified' => 'true'));
             Verification::find($stored_id)->delete();
-            return array('status'=>'success','message'=>'verified');
+            return array('status' => 'success', 'message' => 'verified');
         }
-        return array('status'=>'fail','message'=>'incorrect verification code');
+        return array('status' => 'fail', 'message' => 'incorrect verification code');
 
         forced_url:
-        return array('status'=>'fail','message'=>'what brings you here?');
+        return array('status' => 'fail', 'message' => 'what brings you here?');
     }
 
     public static function sendVerificationCode($country_code, $mobile_number, $verification_code)
