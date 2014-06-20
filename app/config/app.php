@@ -189,7 +189,10 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-
+        'PhoneNumberUtil' => 'libphonenumber\PhoneNumberUtil',
+        'PhoneNumberFormat' => 'libphonenumber\PhoneNumberFormat',
+        'Carbon' => 'Carbon\Carbon',
+        'Agent' => 'Jenssegers\Agent\Facades\Agent',
 	),
 
 );

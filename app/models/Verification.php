@@ -13,7 +13,7 @@ class Verification extends Eloquent
     ];
 
     // Don't forget to fill this array
-    protected $fillable = array('user_id', 'device_model', 'code', 'verified');
+    protected $fillable = array('user_id', 'device_model', 'code');
 
     protected $dates = ['deleted_at'];
 

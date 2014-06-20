@@ -23,7 +23,7 @@ class CreateReferralsTable extends Migration {
             $table->string('invitee_country_code');
             $table->string('invitee_phone_number');
 			$table->timestamps();
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
 		});
 	}
 

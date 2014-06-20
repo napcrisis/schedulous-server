@@ -14,13 +14,17 @@ class CreateUsersTable extends Migration {
 	{
 		Schema::create('users', function(Blueprint $table)
 		{
-            $table->increments('user_id');
+            $table->increments('id');
             $table->string('country_code');
             $table->string('mobile_number')->unique();
-            $table->string('name');
-            $table->string('profile_pic');
+            $table->string('international_number')->unique();
+            $table->string('name')->nullable();
+            $table->string('profile_pic')->nullable();
             $table->string('country');
-            $table->string('referral_code')->unique();
+            $table->string('referral_code')->nullable()->unique();
+            $table->string('xmpp')->nullable()->unique();
+            $table->string('registered')->default('no');
+            $table->timestamp('registered_on')->nullable();
             $table->timestamps();
         });
 	}

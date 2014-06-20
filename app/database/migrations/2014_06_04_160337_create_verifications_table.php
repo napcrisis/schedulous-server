@@ -18,10 +18,10 @@ class CreateVerificationsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('device_model');
             $table->string('code');
-            $table->string('verified');
+            $table->string('verified')->default('no');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

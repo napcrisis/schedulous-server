@@ -15,18 +15,6 @@ App::before(function ($request) {
     $request_uri = $request->getRequestUri();
     $input = Input::all();
     Log::info('[' . Request::getClientIp() . '] ' . $request->url() . ' ' . json_encode($input));
-    /*
-    $fp = fopen("/path/to/private.key", "r");
-    $priv_key = fread($fp, 8192);
-    fclose($fp);
-    // $passphrase is required if your key is encoded (suggested)
-    $res = openssl_get_privatekey($priv_key, $passphrase);
-
-     * NOTE:  Here you use the returned resource value
-
-    openssl_private_decrypt($crypttext,$newsource,$res);
-    */
-
 });
 
 

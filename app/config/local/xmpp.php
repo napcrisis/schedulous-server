@@ -5,5 +5,5 @@ return array(
     'add' => 'type=add',
     'update' => 'type=update',
     'secret_prefix' => '&secret=',
-    'secret' => '5prsNrgN'
+    'secret' => '4h0Adfcq'
 );

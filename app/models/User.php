@@ -23,7 +23,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
      * @var array
      */
     protected $hidden = array('created_at', 'updated_at');
-    protected $fillable = array('mobile_number', 'country_code', 'country', 'referral_code');
+    protected $fillable = array('mobile_number', 'country_code', 'international_number', 'country', 'referral_code');
 
     public function verification()
     {
@@ -40,8 +40,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         return $this->hasMany('Referral');
     }
 
-    public function friend_user()
+    public function friends()
     {
-        return $this->belongsToMany('FriendUser','friend_user');
+        return $this->belongsToMany('User', 'friend_users', 'inviter_id', 'invitee_id');
     }
 }

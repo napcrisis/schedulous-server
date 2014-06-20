@@ -16,9 +16,9 @@ class CreateLoginsTable extends Migration {
 		{
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->string('session')->unique();
+            $table->string('session_id')->unique();
             $table->timestamps();
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 		});
 	}
 
