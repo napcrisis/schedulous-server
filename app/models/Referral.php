@@ -8,7 +8,7 @@ class Referral extends \Eloquent {
 	];
 
 	// Don't forget to fill this array
-	protected $fillable = ['user_id','referral_code','ip_address','device_model'];
+    protected $fillable = ['user_id', 'referral_code', 'ip_address', 'user_agent'];
 
     public function user()
     {

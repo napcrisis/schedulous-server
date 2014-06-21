@@ -59,6 +59,7 @@ class UsersController extends BaseController
                     $user->save();
                 }
                 $result = array('status' => 'success', 'message' => 'verified', 'session_id' => $session_id, 'user' => $user);
+                Cache::forget($key);
             } else { // cannot find data in redis
                 $result['status'] = "fail";
                 $result['message'] = "invalid request";

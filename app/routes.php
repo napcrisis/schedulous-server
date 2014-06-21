@@ -11,17 +11,22 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
+Route::get('/', function () {
+    return View::make('hello');
 });
 
-Route::get('/referral', function () {
-    return View::make('referral');
+Route::get('/referral/{code?}', function ($code = null) {
+    if (is_null($code)) {
+        return View::make('hello');
+    }
+//    Route::controller('referral', 'ReferralsController');
+    ReferralsController::markIncomingReferral($code);
 });
 
-Route::controller('user','UsersController');
-Route::controller('verifications', 'VerificationsController');
+//Route::get('referral/{code?}','ReferralsController@markIncomingReferral');
+
+Route::controller('user', 'UsersController');
+//Route::controller('verifications', 'VerificationsController');
 
 /*
 Route::group(array('prefix' => ''), function () {

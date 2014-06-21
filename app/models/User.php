@@ -30,12 +30,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         return $this->hasMany('Verification');
     }
 
-    public function login()
+    public function logins()
     {
         return $this->hasMany('Login');
     }
 
-    public function referral()
+    public function referrals()
     {
         return $this->hasMany('Referral');
     }
