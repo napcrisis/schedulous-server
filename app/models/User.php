@@ -25,11 +25,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface
     protected $hidden = array('created_at', 'updated_at', 'registered', 'registered_on', 'international_number');
     protected $fillable = array('mobile_number', 'country_code', 'international_number', 'country', 'referral_code');
 
-    public function verification()
-    {
-        return $this->hasMany('Verification');
-    }
-
     public function logins()
     {
         return $this->hasMany('Login');

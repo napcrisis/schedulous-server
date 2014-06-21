@@ -20,48 +20,6 @@ class VerificationsController extends BaseController
 
         return $login->session_id;
     }
-//        $stored_result = Verification::where("user_id", "=", $user_id)
-//            ->where('device_model', '=', $device_model)
-//            ->where('code', '=', $verification_code)
-//            ->get(array('id'));
-//
-//        if (count($stored_result) != 0) {
-//            goto passed;
-//        } else {
-//            goto failed;
-//        }
-//
-//        passed:
-//        $stored_id = $stored_result[0]->id;
-//
-//        $verify = Verification::find($stored_id);
-//        $verify->verified = 'yes';
-//        $verify->save();
-//
-//        // need to create referral code for verified user
-//        // if referral code exist, then no need to create
-//        if ($verify->user->referral_code == null) {
-//            $referral_code = parent::generate_code();
-//            $verify->user->referral_code = $referral_code;
-//            $verify->user->save();
-//        }
-//
-//        //create login entry to mark session of user
-//        $login = Login::create(array("user_id" => $verify->user_id, "session_id" => uniqid($verify->user->mobile_number)));
-//
-//        Verification::find($stored_id)->delete();
-//
-//        // mark user as registered
-//        User::where('id', '=', $verify->user_id)->update(array('registered' => 'yes', 'registered_on' => Carbon::now()));
-//
-//        return array('status' => 'success', 'message' => 'verified', 'session_id' => $login->session_id);
-//
-//        failed:
-//        if ($verification_code != null) {
-//            return array('status' => 'fail', 'message' => 'incorrect verification code');
-//        } else {
-//            return array('status' => 'fail', 'message' => 'what brings you here?');
-//        }
 
     public static function sendVerificationCode($country_code, $mobile_number, $verification_code)
     {

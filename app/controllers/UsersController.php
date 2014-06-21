@@ -17,7 +17,7 @@ class UsersController extends BaseController
         $device_model = Input::get('device_model');
         $code = rand(10000, 99999);
 
-        Verification::create(array('user_id' => $user->id, 'device_model' => $device_model, 'code' => $code));
+        //Verification::create(array('user_id' => $user->id, 'device_model' => $device_model, 'code' => $code));
         if (strcmp(App::environment(), 'production') == 0) {
             $this->sendVerificationCode($country_code, $mobile_number, $code);
         }
@@ -31,6 +31,9 @@ class UsersController extends BaseController
         $status = '';
         if (count($user) == 1) {
             $status = array("status" => "success", "user_id" => $user->id);
+            if (App::runningUnitTests()) {
+                $status = array("status" => "success", "user_id" => $user->id, "code" => $code);
+            }
         } else {
             $status = array("status" => "fail");
         }
@@ -67,24 +70,6 @@ class UsersController extends BaseController
         }
         return $result;
     }
-//        if (count($user) == 1) {
-//            $result = VerificationsController::verify($user_id, $device_model, $code);
-//            if (strcmp($result['status'], 'success') == 0 && is_null($user->xmpp)) {
-//                $xmpp_password = $this::createXMPPAccount($user_id);
-//                $user->xmpp = $xmpp_password;
-//                $user->save();
-//                $result['user'] = $user;
-//            } elseif (strcmp($result['status'], 'success') == 0 && !is_null($user->xmpp)) {
-//                $result['user'] = $user;
-//            } else {
-//                //do nothing
-//                // error message already provided in VerificationsController::verify
-//            }
-//        } else {
-//            $result['status'] = "fail";
-//            $result['message'] = "user not found";
-//        }
-
 
     public function postUpdateName()
     {
