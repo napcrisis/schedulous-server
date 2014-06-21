@@ -22,6 +22,12 @@ class UsersController extends BaseController
             $this->sendVerificationCode($country_code, $mobile_number, $code);
         }
 
+        $value = array(
+            "user_id" => $user->id,
+            "device_model" => $device_model
+        );
+        $key = "verify:" . $code;
+        Cache::put($key, $value, 3);
         $status = '';
         if (count($user) == 1) {
             $status = array("status" => "success", "user_id" => $user->id);
@@ -39,26 +45,45 @@ class UsersController extends BaseController
         $code = Input::get("code");
         $device_model = Input::get("device_model");
 
-        $user = User::find($user_id);
-        if (count($user) == 1) {
-            $result = VerificationsController::verify($user_id, $device_model, $code);
-            if (strcmp($result['status'], 'success') == 0 && is_null($user->xmpp)) {
-                $xmpp_password = $this::createXMPPAccount($user_id);
-                $user->xmpp = $xmpp_password;
-                $user->save();
-                $result['user'] = $user;
-            } elseif (strcmp($result['status'], 'success') == 0 && !is_null($user->xmpp)) {
-                $result['user'] = $user;
-            } else {
-                //do nothing
-                // error message already provided in VerificationsController::verify
+        $result = '';
+        $key = 'verify:' . $code;
+        if (Cache::has($key)) {
+            $value = Cache::get($key);
+            // comparing request inputs with redis data
+            if (strcmp($value['device_model'], $device_model) == 0 && strcmp($value['user_id'], $user_id) == 0) {
+                $session_id = VerificationsController::verify($user_id);
+                $user = User::find($user_id);
+                if (is_null($user->xmpp)) {
+                    $xmpp_password = $this::createXMPPAccount($user_id);
+                    $user->xmpp = $xmpp_password;
+                    $user->save();
+                }
+                $result = array('status' => 'success', 'message' => 'verified', 'session_id' => $session_id, 'user' => $user);
+            } else { // cannot find data in redis
+                $result['status'] = "fail";
+                $result['message'] = "invalid request";
             }
-        } else {
-            $result['status'] = "fail";
-            $result['message'] = "user not found";
         }
         return $result;
     }
+//        if (count($user) == 1) {
+//            $result = VerificationsController::verify($user_id, $device_model, $code);
+//            if (strcmp($result['status'], 'success') == 0 && is_null($user->xmpp)) {
+//                $xmpp_password = $this::createXMPPAccount($user_id);
+//                $user->xmpp = $xmpp_password;
+//                $user->save();
+//                $result['user'] = $user;
+//            } elseif (strcmp($result['status'], 'success') == 0 && !is_null($user->xmpp)) {
+//                $result['user'] = $user;
+//            } else {
+//                //do nothing
+//                // error message already provided in VerificationsController::verify
+//            }
+//        } else {
+//            $result['status'] = "fail";
+//            $result['message'] = "user not found";
+//        }
+
 
     public function postUpdateName()
     {
@@ -94,12 +119,14 @@ class UsersController extends BaseController
     {
         $num = $country_code . $mobile_number;
         $phone_util = PhoneNumberUtil::getInstance();
+        $result = '';
         try {
             $num_proto = $phone_util->parse($num, "SG");
-            return $phone_util->format($num_proto, PhoneNumberFormat::INTERNATIONAL);
+            $result = $phone_util->format($num_proto, PhoneNumberFormat::INTERNATIONAL);
         } catch (\libphonenumber\NumberParseException $e) {
             echo $e->getMessage();
         }
+        return $result;
     }
 
     public function postSyncPhonebook()
