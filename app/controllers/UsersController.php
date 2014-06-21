@@ -18,7 +18,9 @@ class UsersController extends BaseController
         $code = rand(10000, 99999);
 
         Verification::create(array('user_id' => $user->id, 'device_model' => $device_model, 'code' => $code));
-        //$this->sendVerificationCode($country_code, $mobile_number, $code);
+        if (strcmp(App::environment(), 'production') == 0) {
+            $this->sendVerificationCode($country_code, $mobile_number, $code);
+        }
 
         $status = '';
         if (count($user) == 1) {
@@ -70,6 +72,11 @@ class UsersController extends BaseController
         Log::info('[' . Request::getClientIp() . '] ' . $method_name . ': ' . json_encode(Input::all()));
 
         $picture = Input::get('picture');
+    }
+
+    public function postTest()
+    {
+        echo App::environment();
     }
 
     public function processIntNum($country_code, $mobile_number)
