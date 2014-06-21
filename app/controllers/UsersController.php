@@ -38,18 +38,23 @@ class UsersController extends BaseController
         $user_id = Input::get("user_id");
         $code = Input::get("code");
         $device_model = Input::get("device_model");
-        $result = VerificationsController::verify($user_id, $device_model, $code);
 
         $user = User::find($user_id);
-
-        if (strcmp($result['status'], 'success') == 0 && count($user) == 1 && is_null($user->xmpp)) {
-            $xmpp_password = $this::createXMPPAccount($user_id);
-            $user->xmpp = $xmpp_password;
-            $user->save();
-            $result['user'] = $user;
-        } elseif (strcmp($result['status'], 'success') == 0 && count($user) == 1 && !is_null($user->xmpp)) {
-            $result['user'] = $user;
+        if (count($user) == 1) {
+            $result = VerificationsController::verify($user_id, $device_model, $code);
+            if (strcmp($result['status'], 'success') == 0 && is_null($user->xmpp)) {
+                $xmpp_password = $this::createXMPPAccount($user_id);
+                $user->xmpp = $xmpp_password;
+                $user->save();
+                $result['user'] = $user;
+            } elseif (strcmp($result['status'], 'success') == 0 && !is_null($user->xmpp)) {
+                $result['user'] = $user;
+            } else {
+                //do nothing
+                // error message already provided in VerificationsController::verify
+            }
         } else {
+            $result['status'] = "fail";
             $result['message'] = "user not found";
         }
         return $result;
