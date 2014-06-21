@@ -41,10 +41,13 @@ class UsersController extends BaseController
         $result = VerificationsController::verify($user_id, $device_model, $code);
 
         $user = User::find($user_id);
+        echo json_encode($user);
         if (strcmp($result['status'], 'success') == 0 && count($user) == 1 && is_null($user->xmpp)) {
             $xmpp_password = $this::createXMPPAccount($user_id);
             $user->xmpp = $xmpp_password;
             $user->save();
+            $result['user'] = $user;
+        } elseif (strcmp($result['status'], 'success') == 0 && count($user) == 1 && !is_null($user->xmpp)) {
             $result['user'] = $user;
         } else {
             $result['message'] = "user not found";
