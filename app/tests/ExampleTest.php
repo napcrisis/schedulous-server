@@ -38,7 +38,7 @@ class ExampleTest extends TestCase
         $result = $this->UserRegistration($this->user_list[0]);
         echo "====== Registering User Completed ======" . PHP_EOL . PHP_EOL;
 
-        $user_id = json_encode($result->user->id);
+        $user_id = json_encode($result->user_id);
         $codeArr = Verification::where('user_id', '=', $user_id)->get(array('code'));
         $code = $codeArr[0]->code;
 

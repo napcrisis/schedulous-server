@@ -22,7 +22,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
      *
      * @var array
      */
-    protected $hidden = array('created_at', 'updated_at');
+    protected $hidden = array('created_at', 'updated_at', 'registered', 'registered_on', 'international_number');
     protected $fillable = array('mobile_number', 'country_code', 'international_number', 'country', 'referral_code');
 
     public function verification()

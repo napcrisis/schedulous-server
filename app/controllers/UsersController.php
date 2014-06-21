@@ -9,7 +9,7 @@ class UsersController extends BaseController
         Log::info('[' . Request::getClientIp() . '] ' . $method_name . ': ' . json_encode(Input::all()));
         $mobile_number = Input::get('mobile_number');
         $country_code = Input::get('country_code');
-        $country = Input::get('country');
+        $country = strtolower(Input::get('country'));
         $international_number = $this->processIntNum($country_code, $mobile_number);
         $user = User::firstOrNew(array('mobile_number' => $mobile_number, 'country_code' => $country_code,
             'international_number' => $international_number, 'country' => $country));
@@ -24,7 +24,7 @@ class UsersController extends BaseController
 
         $status = '';
         if (count($user) == 1) {
-            $status = array("status" => "success", "user" => $user);
+            $status = array("status" => "success", "user_id" => $user->id);
         } else {
             $status = array("status" => "fail");
         }
@@ -41,12 +41,14 @@ class UsersController extends BaseController
         $result = VerificationsController::verify($user_id, $device_model, $code);
 
         $user = User::find($user_id);
-        if (strcmp($result['status'], 'success') == 0 && is_null($user->xmpp)) {
+        if (strcmp($result['status'], 'success') == 0 && count($user) == 1 && is_null($user->xmpp)) {
             $xmpp_password = $this::createXMPPAccount($user_id);
             $user->xmpp = $xmpp_password;
             $user->save();
+            $result['user'] = $user;
+        } else {
+            $result['message'] = "user not found";
         }
-        $result['xmpp'] = $user->xmpp;
         return $result;
     }
 
@@ -76,7 +78,8 @@ class UsersController extends BaseController
 
     public function postTest()
     {
-        echo App::environment();
+        $user = User::find(1);
+        return (count($user) == 1) . PHP_EOL;
     }
 
     public function processIntNum($country_code, $mobile_number)
@@ -102,7 +105,7 @@ class UsersController extends BaseController
         foreach ($friend_list as $friend) {
             $mobile_number = $friend['mobile_number'];
             $country_code = $friend['country_code'];
-            $country = $friend['country'];
+            $country = strtolower($friend['country']);
             $international_number = $this->processIntNum($country_code, $mobile_number);
             $user = User::firstOrCreate(array('mobile_number' => $mobile_number, 'country_code' => $country_code,
                 'international_number' => $international_number, 'country' => $country));
