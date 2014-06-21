@@ -17,9 +17,9 @@ class BaseController extends Controller
 
     static function generate_code()
     {
-        $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        $chars = "0123456789abcdefghijklmnopqrstuvwxyz";
         $res = "";
-        for ($i = 0; $i < 25; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $res .= $chars[mt_rand(0, strlen($chars) - 1)];
         }
         return $res;
