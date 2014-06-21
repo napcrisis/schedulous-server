@@ -23,7 +23,8 @@ class ReferralsController extends BaseController
         $headers = array(
             'Content-Type: application/vnd.android.package-archive',
         );
-        return Response::download($file, $filename, $headers);
+        //return Response::download($file, $filename, $headers);
+        return "download link";
     }
 
     public function missingMethod($parameters = array())
