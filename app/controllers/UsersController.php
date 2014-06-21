@@ -108,19 +108,14 @@ class UsersController extends BaseController
         $user = User::find($user_id);
         $friend_list = $user->friends()->get(array('mobile_number', 'registered'));
         $registered = array();
-        $non_registered = array();
         foreach ($friend_list as $friend) {
             $check_reg = $friend->registered;
             if (strcmp($check_reg, 'yes')) {
                 array_push($registered, $friend->mobile_number);
-            } else {
-                array_push($non_registered, $friend->mobile_number);
             }
         }
 
-        $friend_list = array('registered' => $registered, 'non-registered' => $non_registered);
-
-        $result = array('status' => 'success', "contacts" => $friend_list, 'last_updated' => $request_update);
+        $result = array('status' => 'success', "registered" => $registered, 'last_updated' => $request_update);
         return $result;
     }
 
