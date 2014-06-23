@@ -1,27 +1,10 @@
 <?php
 
-class VerificationsController extends BaseController
+class SMSGateway
 {
 
-    public static function verify($user_id)
-    {
-        $user = User::find($user_id);
 
-        if ($user->referral_code == null) {
-            $referral_code = parent::generate_code();
-            $user->referral_code = $referral_code;
-            $user->registered = 'yes';
-            $user->registered_on = Carbon::now();
-            $user->save();
-        }
-
-        //create login entry to mark session of user
-        $login = Login::create(array("user_id" => $user->id, "session_id" => uniqid($user->mobile_number)));
-
-        return $login->session_id;
-    }
-
-    public static function sendVerificationCode($country_code, $mobile_number, $verification_code)
+    public static function sendVerificationCode($international_number, $verification_code)
     {
         /*
          * Telerivet API Example (PHP) - Sending SMS from a form on your website
@@ -45,7 +28,7 @@ class VerificationsController extends BaseController
         curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array(
             'content' => $verification_code,
             'phone_id' => $phone_id,
-            'to_number' => $country_code . $mobile_number,
+            'to_number' => $international_number,
         ), '', '&'));
 
         // if you get SSL errors, download SSL certs from https://telerivet.com/_media/cacert.pem .
@@ -68,10 +51,4 @@ class VerificationsController extends BaseController
             }
         }
     }
-
-    public function missingMethod($parameters = array())
-    {
-        return "invalid entry";
-    }
-
 }

@@ -4,20 +4,18 @@ class ExampleTest extends TestCase
 {
     var $user_list = array(
         [
-            "mobile_number" => "98374793",
-            "country_code" => "+65",
+            "international_number" => "+65 9837 4793",
             "country" => "singapore",
-            "device_model" => "I9100"
+            "device_model" => "GT-I9100"
         ],
         [
-            "mobile_number" => "91015036",
+            "international_number" => "+65 9101 5036",
             "country_code" => "+65",
             "country" => "singapore",
             "device_model" => "Note 2"
         ],
         [
-            "mobile_number" => "93893389",
-            "country_code" => "+65",
+            "international_number" => "+65 9389 3389",
             "country" => "singapore",
             "device_model" => "Galaxy S5"
         ],
@@ -95,7 +93,7 @@ class ExampleTest extends TestCase
             "user_id" => $user_id,
             "code" => $code,
             "country" => "singapore",
-            "device_model" => "I9100"
+            "device_model" => "GT-I9100"
         );
     }
 
@@ -105,18 +103,15 @@ class ExampleTest extends TestCase
             "user_id" => $user_id,
             "friends" => array(
                 array(
-                    "mobile_number" => "98374793",
-                    "country_code" => "+65",
+                    "international_number" => "+65 9837 4793",
                     "country" => "singapore"
                 ),
                 array(
-                    "mobile_number" => "91015036",
-                    "country_code" => "+65",
+                    "international_number" => "+65 9101 5036",
                     "country" => "singapore"
                 ),
                 array(
-                    "mobile_number" => "93893389",
-                    "country_code" => "+65",
+                    "international_number" => "+65 9389 3389",
                     "country" => "singapore"
                 )
             )

@@ -5,6 +5,7 @@ class ReferralsController extends BaseController
 
     public static function markIncomingReferral($code)
     {
+//        @todo : must verify referral code validity before continuing
         // record IP address
         // record user agent
         // record referral code
