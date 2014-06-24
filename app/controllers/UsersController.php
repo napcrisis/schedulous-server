@@ -121,6 +121,12 @@ class UsersController extends BaseController
         Log::info(json_encode(Input::all()));
 
         $user_id = Input::get('user_id');
+
+        if (strlen($user_id) == 0 || is_null($user_id)) {
+            $result = array('status' => 'fail', "message" => "no user_id", 'last_updated' => $request_update);
+            return $result;
+        }
+
         $friend_list = Input::get('contacts');
         $request_update = Carbon::now()->toDateTimeString();
 
