@@ -121,13 +121,12 @@ class UsersController extends BaseController
         Log::info(json_encode(Input::all()));
 
         $user_id = Input::get('user_id');
-        $friend_list = Input::get('friends');
+        $friend_list = Input::get('contacts');
         $request_update = Carbon::now()->toDateTimeString();
 
         // inserts new friends into user database
         // creates mapping of friends
-        foreach ($friend_list as $friend) {
-            $international_number = $friend['international_number'];
+        foreach ($friend_list as $international_number) {
             $country = $this->countryFromNumber($international_number);
             $user = User::firstOrCreate(array('international_number' => $international_number, 'country' => $country));
             if ($user->user_id != $user_id) {
