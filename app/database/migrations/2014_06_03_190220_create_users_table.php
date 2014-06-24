@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration {
             $table->increments('user_id');
             $table->string('international_number')->unique();
             $table->string('name')->nullable();
-            $table->string('profile_pic')->nullable();
+            $table->string('profile_pic_url')->nullable();
             $table->string('country');
             $table->string('referral_code')->nullable()->unique();
             $table->string('xmpp')->nullable()->unique();

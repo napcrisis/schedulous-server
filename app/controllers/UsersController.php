@@ -8,12 +8,12 @@ class UsersController extends BaseController
 
     public function postRegister()
     {
-        $method_name = 'register';
+        $method_name = '[user] register';
         Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
         $international_number = Input::get('international_number');
-        $country = strtolower(Input::get('country'));
+        $country = $this->countryFromNumber($international_number);
         $user = User::firstOrNew(array('international_number' => $international_number, 'country' => $country));
         $user->save();
         $device_model = Input::get('device_model');
@@ -45,7 +45,7 @@ class UsersController extends BaseController
 
     public function postVerify()
     {
-        $method_name = 'verify';
+        $method_name = '[user] verify';
         Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
@@ -82,16 +82,16 @@ class UsersController extends BaseController
         return $result;
     }
 
-    public function postUpdateName()
+    public function postUpdateUser()
     {
-        $method_name = 'update-name';
+        $method_name = '[user] update-name';
         Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
         $user_id = Input::get('user_id');
         $name = Input::get('name');
-        $user = User::where('id', '=', $user_id)->update(array('name' => $name));
-        $status = '';
+        $profile_pic = Input::get('profile_pic_url');
+        $user = User::where('id', '=', $user_id)->update(array('name' => $name, 'profile_pic' => $profile_pic));
         if (count($user) == 1) {
             $status = array("status" => "success");
         } else {
@@ -105,7 +105,7 @@ class UsersController extends BaseController
 
     public function postUpdatePic()
     {
-        $method_name = 'update-pic';
+        $method_name = '[user] update-pic';
         Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
@@ -115,7 +115,7 @@ class UsersController extends BaseController
 
     public function postSyncPhonebook()
     {
-        $method_name = 'sync-phonebook';
+        $method_name = '[user] sync-phonebook';
         Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
@@ -128,7 +128,7 @@ class UsersController extends BaseController
         // creates mapping of friends
         foreach ($friend_list as $friend) {
             $international_number = $friend['international_number'];
-            $country = strtolower($friend['country']);
+            $country = $this->countryFromNumber($international_number);
             $user = User::firstOrCreate(array('international_number' => $international_number, 'country' => $country));
             if ($user->user_id != $user_id) {
                 User::find($user_id)->friends()->attach($user);
@@ -155,12 +155,12 @@ class UsersController extends BaseController
 
     public function postTest()
     {
-        $method_name = 'test';
+        $method_name = '[user] test';
         Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
 
-        $user = User::find(1);
+        exit;
         Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
 
         return (count($user) == 1) . PHP_EOL;

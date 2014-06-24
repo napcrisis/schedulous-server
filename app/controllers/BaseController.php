@@ -25,6 +25,15 @@ class BaseController extends Controller
         return $res;
     }
 
+    protected function countryFromNumber($number)
+    {
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        $geocoder = PhoneNumberOfflineGeocoder::getInstance();
+        $numberProto = $phoneUtil->parse($number, "US");
+        $country = strtolower($geocoder->getDescriptionForNumber($numberProto, "en_US"));
+        return $country;
+    }
+
     public function missingMethod($parameters = array())
     {
         return "invalid entry";

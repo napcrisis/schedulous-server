@@ -34,11 +34,8 @@ class GroupsController extends BaseController
 
         // create account for non-registered
         // push their user_id to registered array
-        $phoneUtil = PhoneNumberUtil::getInstance();
-        $geocoder = PhoneNumberOfflineGeocoder::getInstance();
         foreach ($filtered_non_reg as $international_number) {
-            $numberProto = $phoneUtil->parse($international_number, "US");
-            $country = strtolower($geocoder->getDescriptionForNumber($numberProto, "en_US"));
+            $country = $this->countryFromNumber($international_number);
             $user = User::firstOrCreate(array('international_number' => $international_number, 'country' => $country));
 //            echo json_encode($user) . PHP_EOL;
             if ($user->user_id != $user_id) {
@@ -62,7 +59,7 @@ class GroupsController extends BaseController
 //        echo json_encode($members) . PHP_EOL;
 
         $group = Group::find($group->group_id);
-        $group_members = $group->group_user()->get(array('users.user_id', 'users.profile_pic', 'users.international_number', 'users.name'));
+        $group_members = $group->group_user()->get(array('users.user_id', 'users.profile_pic_url', 'users.international_number', 'users.name'));
 
         $result = array('group' => $group, 'members' => $group_members);
         echo json_encode($result) . PHP_EOL;

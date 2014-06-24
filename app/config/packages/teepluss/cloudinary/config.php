@@ -12,10 +12,10 @@ return array(
     |
     */
 
-    'cloudName' => 'dmpqz7bjy',
-    'baseUrl' => 'http://res.cloudinary.com/dmpqz7bj',
-    'secureUrl' => 'https://res.cloudinary.com/dmpqz7bjy',
-    'apiBaseUrl' => 'https://api.cloudinary.com/v1_1/dmpqz7bjy',
+    'cloudName' => 'schedulous',
+    'baseUrl' => 'http://res.cloudinary.com/schedulous',
+    'secureUrl' => 'https://res.cloudinary.com/schedulous',
+    'apiBaseUrl' => 'https://api.cloudinary.com/v1_1/schedulous',
     'apiKey' => '633293346777846',
     'apiSecret' => 'mHd2ykVc9iOKVoJ-P8X-BGPoNaM',
 
