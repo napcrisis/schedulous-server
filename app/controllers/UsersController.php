@@ -2,12 +2,15 @@
 
 class UsersController extends BaseController
 {
+    /*
+     * START OF RESTFUL METHODS
+     */
 
     public function postRegister()
     {
         $method_name = 'register';
-        Log::info('===========================================');
-        Log::info('[' . Request::getClientIp() . '] ' . $method_name);
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
         $international_number = Input::get('international_number');
         $country = strtolower(Input::get('country'));
@@ -21,30 +24,30 @@ class UsersController extends BaseController
         }
 
         $value = array(
-            "user_id" => $user->id,
+            "user_id" => $user->user_id,
             "device_model" => $device_model
         );
         $key = "verify:" . $code;
         Cache::put($key, $value, 3);
         $status = '';
         if (count($user) == 1) {
-            $status = array("status" => "success", "user_id" => $user->id);
+            $status = array("status" => "success", "user_id" => $user->user_id);
             if (App::runningUnitTests()) {
-                $status = array("status" => "success", "user_id" => $user->id, "code" => $code);
+                $status = array("status" => "success", "user_id" => $user->user_id, "code" => $code);
             }
         } else {
             $status = array("status" => "fail");
         }
         Log::info(json_encode($status));
-        Log::info('===========================================');
+        Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
         return $status;
     }
 
     public function postVerify()
     {
         $method_name = 'verify';
-        Log::info('===========================================');
-        Log::info('[' . Request::getClientIp() . '] ' . $method_name);
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
         $user_id = Input::get("user_id");
         $code = Input::get("code");
@@ -65,21 +68,25 @@ class UsersController extends BaseController
                 }
                 $result = array('status' => 'success', 'message' => 'verified', 'session_id' => $session_id, 'user' => $user);
                 Cache::forget($key);
+
+                $this->checkIfReferred($device_model, $user);
+
             } else { // cannot find data in redis
                 $result['status'] = "fail";
                 $result['message'] = "invalid request";
             }
         }
+
         Log::info(json_encode($result));
-        Log::info('===========================================');
+        Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
         return $result;
     }
 
     public function postUpdateName()
     {
         $method_name = 'update-name';
-        Log::info('===========================================');
-        Log::info('[' . Request::getClientIp() . '] ' . $method_name);
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
         $user_id = Input::get('user_id');
         $name = Input::get('name');
@@ -91,7 +98,7 @@ class UsersController extends BaseController
             $status = array("status" => "fail");
         }
         Log::info(json_encode($status));
-        Log::info('===========================================');
+        Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
 
         return $status;
     }
@@ -99,47 +106,18 @@ class UsersController extends BaseController
     public function postUpdatePic()
     {
         $method_name = 'update-pic';
-        Log::info('===========================================');
-        Log::info('[' . Request::getClientIp() . '] ' . $method_name);
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
 
         //$picture = Input::get('picture');
     }
 
-    public function postTest()
-    {
-        $method_name = 'test';
-        Log::info('===========================================');
-        Log::info('[' . Request::getClientIp() . '] ' . $method_name);
-        Log::info(json_encode(Input::all()));
-
-        $user = User::find(1);
-        Log::info('===========================================');
-
-        return (count($user) == 1) . PHP_EOL;
-    }
-
-    /*  not needed anymore. but still keeping it for future reference.
-    public function processIntNum($country_code, $mobile_number)
-    {
-        $num = $country_code . $mobile_number;
-        $phone_util = PhoneNumberUtil::getInstance();
-        $result = '';
-        try {
-            $num_proto = $phone_util->parse($num, "SG");
-            $result = $phone_util->format($num_proto, PhoneNumberFormat::INTERNATIONAL);
-        } catch (\libphonenumber\NumberParseException $e) {
-            echo $e->getMessage();
-        }
-        return $result;
-    }
-    */
-
     public function postSyncPhonebook()
     {
         $method_name = 'sync-phonebook';
-        Log::info('===========================================');
-        Log::info('[' . Request::getClientIp() . '] ' . $method_name);
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
 
         $user_id = Input::get('user_id');
@@ -152,7 +130,7 @@ class UsersController extends BaseController
             $international_number = $friend['international_number'];
             $country = strtolower($friend['country']);
             $user = User::firstOrCreate(array('international_number' => $international_number, 'country' => $country));
-            if ($user->id != $user_id) {
+            if ($user->user_id != $user_id) {
                 User::find($user_id)->friends()->attach($user);
             }
         }
@@ -170,9 +148,40 @@ class UsersController extends BaseController
 
         $result = array('status' => 'success', "registered" => $registered, 'last_updated' => $request_update);
         Log::info(json_encode($result));
-        Log::info('===========================================');
+        Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
 
         return $result;
+    }
+
+    public function postTest()
+    {
+        $method_name = 'test';
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
+        Log::info(json_encode(Input::all()));
+
+        $user = User::find(1);
+        Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
+
+        return (count($user) == 1) . PHP_EOL;
+    }
+
+    /*
+     * END OF RESTFUL METHODS
+     */
+
+    /*
+     * START OF PRIVATE METHODS
+     */
+    private function checkIfReferred($device_model, $user)
+    {
+        $ip_address = Request::getClientIp();
+        $referral_list = Referral::where('ip_address', '=', $ip_address)->where('user_agent', 'like', '%' . $device_model . '%')->get()->toArray();
+        if (count($referral_list) != 0) { // user is referred from someone
+            $referral = $referral_list[count($referral_list) - 1];
+            $referral_id = $referral->id;
+            Referral::where('referral_id', '=', $referral_id)->update(array('converted' => 'yes', 'invitee_id' => $user->user_id));
+        }
     }
 
     private function createXMPPAccount($user)
@@ -182,15 +191,15 @@ class UsersController extends BaseController
         $xmpp_credentials = Config::get('xmpp');
         $xmpp_password = $this->generateRandomPassword();
         $xmpp_password = substr($xmpp_password, 0, 50);
-        Log::info('xmpp password: ' . $xmpp_password);
+        //Log::info('xmpp password: ' . $xmpp_password);
 
         if (!App::runningUnitTests()) {
             $url = $xmpp_credentials["base_url"] . $xmpp_credentials["add"] . $xmpp_credentials["secret_prefix"] .
                 $xmpp_credentials["secret"] . "&username=" . $user . "&password=" . $xmpp_password;
-            Log::info('Outgoing XMPP url: ' . $url);
+            //Log::info('Outgoing XMPP url: ' . $url);
             $xml_response = file_get_contents($url);
             $xmpp_response = simplexml_load_string($xml_response);
-            Log::info("Chat account result!:" . $xml_response);
+            //Log::info("Chat account result!:" . $xml_response);
         }
         return $xmpp_password;
     }
@@ -208,7 +217,7 @@ class UsersController extends BaseController
         }
 
         //create login entry to mark session of user
-        $login = Login::create(array("user_id" => $user->id, "session_id" => uniqid($user->international_number)));
+        $login = Login::create(array("user_id" => $user->user_id, "session_id" => uniqid($user->international_number)));
 
         return $login->session_id;
     }
@@ -224,8 +233,30 @@ class UsersController extends BaseController
         SMSGateway::sendVerificationCode($international_number, $code);
     }
 
-    public function missingMethod($parameters = array())
+
+    /*
+     * END OF PRIVATE METHODS
+     */
+
+    /*
+     * START OF COMMENTED METHODS
+     */
+
+    /*  not needed anymore. but still keeping it for future reference.
+    public function processIntNum($country_code, $mobile_number)
     {
-        return "invalid entry";
+        $num = $country_code . $mobile_number;
+        $phone_util = PhoneNumberUtil::getInstance();
+        $result = '';
+        try {
+            $num_proto = $phone_util->parse($num, "SG");
+            $result = $phone_util->format($num_proto, PhoneNumberFormat::INTERNATIONAL);
+        } catch (\libphonenumber\NumberParseException $e) {
+            echo $e->getMessage();
+        }
+        return $result;
     }
+    */
+
+
 }

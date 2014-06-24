@@ -124,6 +124,7 @@ return array(
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
         'Way\Generators\GeneratorsServiceProvider',
         'Jenssegers\Agent\AgentServiceProvider',
+        'Teepluss\Cloudinary\CloudinaryServiceProvider'
 	),
 
 	/*
@@ -192,8 +193,10 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
         'PhoneNumberUtil' => 'libphonenumber\PhoneNumberUtil',
         'PhoneNumberFormat' => 'libphonenumber\PhoneNumberFormat',
+        'PhoneNumberOfflineGeocoder' => 'libphonenumber\geocoding\PhoneNumberOfflineGeocoder',
         'Carbon' => 'Carbon\Carbon',
         'Agent' => 'Jenssegers\Agent\Facades\Agent',
+        'Cloudy' => 'Teepluss\Cloudinary\Facades\Cloudy'
 	),
 
 );

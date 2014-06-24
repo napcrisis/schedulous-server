@@ -12,7 +12,7 @@ class ReferralsController extends BaseController
         // record user_id
         $ip_address = Request::getClientIp();
         $user_agent = Agent::getUserAgent() . '<br><br>';
-        $user_id = User::where('referral_code', '=', $code)->get(array('id'))[0]->id;
+        $user_id = User::where('referral_code', '=', $code)->get(array('id'))[0]->user_id;
 
         $referral = Referral::create(array('ip_address' => $ip_address, 'user_agent' => $user_agent,
             'referral_code' => $code, 'user_id' => $user_id));

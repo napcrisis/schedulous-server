@@ -24,6 +24,7 @@ Route::get('/referral/{code?}', function ($code = null) {
 
 
 Route::controller('user', 'UsersController');
+Route::controller('group', 'GroupsController');
 
 /*
 Route::group(array('prefix' => ''), function () {

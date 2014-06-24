@@ -17,12 +17,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface
      */
     protected $table = 'users';
 
+    protected $primaryKey = 'user_id';
+
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = array('created_at', 'updated_at', 'registered', 'registered_on', 'international_number');
+    protected $hidden = array('created_at', 'updated_at', 'registered', 'registered_on');
     protected $fillable = array('international_number', 'country', 'referral_code');
 
     public function logins()

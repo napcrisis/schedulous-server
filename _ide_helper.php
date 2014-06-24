@@ -13265,6 +13265,10 @@ namespace {
     {
     }
 
+    class PhoneNumberOfflineGeocoder extends \libphonenumber\geocoding\PhoneNumberOfflineGeocoder
+    {
+    }
+
     class Carbon extends \Carbon\Carbon
     {
     }

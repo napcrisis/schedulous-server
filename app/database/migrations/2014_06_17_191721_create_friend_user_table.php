@@ -17,8 +17,8 @@ class CreateFriendUserTable extends Migration {
 			$table->increments('id');
             $table->integer('inviter_id')->unsigned();
             $table->integer('invitee_id')->unsigned();
-            $table->foreign('inviter_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('invitee_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('inviter_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('invitee_id')->references('user_id')->on('users')->onDelete('cascade');
 //            $table->timestamps();
 		});
 	}

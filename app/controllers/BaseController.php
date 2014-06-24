@@ -25,4 +25,8 @@ class BaseController extends Controller
         return $res;
     }
 
+    public function missingMethod($parameters = array())
+    {
+        return "invalid entry";
+    }
 }
