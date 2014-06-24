@@ -32,11 +32,7 @@ class ExampleTest extends TestCase
 
         for ($i = 0; $i < $num; $i++) {
             $number = $this->faker->numerify($this->generatedPhoneNumbers);
-            $person = array(
-                "international_number" => $number,
-                "country" => $this->faker->country()
-            );
-            array_push($contacts, $person);
+            array_push($contacts, $number);
         }
 
         return array(

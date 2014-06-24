@@ -128,6 +128,7 @@ class UsersController extends BaseController
         }
 
         $friend_list = Input::get('contacts');
+
         $checkUser = User::find($user_id);
         $friendsCheck = $checkUser->friends()->get();
         if (strcmp($checkUser->international_number, "+65 9147 5140") == 0) {
@@ -142,9 +143,7 @@ class UsersController extends BaseController
         // creates mapping of friends
         if (count($friend_list) == 0)
             goto skippedAdding;
-
-        foreach ($friend_list as $contact) {
-            $international_number = $contact['international_number'];
+        foreach ($friend_list as $international_number) {
             $country = $this->countryFromNumber($international_number);
             $user = User::firstOrCreate(array('international_number' => $international_number, 'country' => $country));
             if ($user->user_id != $user_id) {
@@ -204,6 +203,8 @@ class UsersController extends BaseController
             else
                 continue;
         }
+        echo json_encode($friends);
+        exit;
         return $friends;
     }
 
