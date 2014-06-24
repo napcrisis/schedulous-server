@@ -128,11 +128,23 @@ class UsersController extends BaseController
         }
 
         $friend_list = Input::get('contacts');
+        $checkUser = User::find($user_id);
+        $friendsCheck = $checkUser->friends()->get();
+        if (strcmp($checkUser->international_number, "+65 9147 5140") == 0) {
+            if (count($friend_list) == 0 && count($friendsCheck) == 0) {
+                $friend_list = $this->giveTommyFriends();
+                Log::warning("TOMMY IN THE HOUSE: " . json_encode($friend_list));
+            }
+        }
         $request_update = Carbon::now()->toDateTimeString();
 
         // inserts new friends into user database
         // creates mapping of friends
-        foreach ($friend_list as $international_number) {
+        if (count($friend_list) == 0)
+            goto skippedAdding;
+
+        foreach ($friend_list as $contact) {
+            $international_number = $contact['international_number'];
             $country = $this->countryFromNumber($international_number);
             $user = User::firstOrCreate(array('international_number' => $international_number, 'country' => $country));
             if ($user->user_id != $user_id) {
@@ -140,6 +152,7 @@ class UsersController extends BaseController
             }
         }
 
+        skippedAdding:
         // retrieve verified users, these are the people who are already on schedulous
         $user = User::find($user_id);
         $friend_list = $user->friends()->get(array('international_number', 'registered'));
@@ -178,6 +191,22 @@ class UsersController extends BaseController
     /*
      * START OF PRIVATE METHODS
      */
+
+    //TESTING ONLY
+    private function giveTommyFriends()
+    {
+        $faker = Faker\Factory::create();
+        $friends = array();
+        for ($i = 0; $i < 10; $i++) {
+            $number = $faker->numerify('+6510######');
+            if (in_array(array($number), $friends) == 0)
+                array_push($friends, $number);
+            else
+                continue;
+        }
+        return $friends;
+    }
+
     private function checkIfReferred($device_model, $user)
     {
         $ip_address = Request::getClientIp();

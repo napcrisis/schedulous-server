@@ -7,7 +7,7 @@ class UserTableSeeder extends Seeder
         $faker = Faker\Factory::create();
         for ($i = 0; $i < 10; $i++) {
             User::create(array(
-                'international_number' => $faker->numerify('+6590######'),
+                'international_number' => $faker->numerify('+6580######'),
                 'country' => $faker->country,
                 'registered' => 'yes',
                 'registered_on' => $faker->dateTimeThisMonth()

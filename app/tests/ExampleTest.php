@@ -7,7 +7,7 @@ class ExampleTest extends TestCase
      */
 
     var $faker;
-    var $generatedPhoneNumbers = '+659100000#';
+    var $generatedPhoneNumbers = '+65900000##';
     var $generatedUsers;
     var $numOfContacts = 2;
 
@@ -31,8 +31,9 @@ class ExampleTest extends TestCase
         $contacts = array();
 
         for ($i = 0; $i < $num; $i++) {
+            $number = $this->faker->numerify($this->generatedPhoneNumbers);
             $person = array(
-                "international_number" => $this->faker->numerify($this->generatedPhoneNumbers),
+                "international_number" => $number,
                 "country" => $this->faker->country()
             );
             array_push($contacts, $person);
@@ -40,14 +41,16 @@ class ExampleTest extends TestCase
 
         return array(
             "user_id" => $user_id,
-            "friends" => $contacts
+            "contacts" => $contacts
         );
     }
 
     public function GenerateUser()
     {
+        $number = "+65 9147 5140";
+//        $number = $this->faker->numerify($this->generatedPhoneNumbers);
         return array(
-            "international_number" => $this->faker->numerify($this->generatedPhoneNumbers),
+            "international_number" => $number,
             "country" => $this->faker->country(),
             "device_model" => "GT-I9100"
         );
