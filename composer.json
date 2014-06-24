@@ -10,9 +10,7 @@
         "giggsey/libphonenumber-for-php": "~6.0",
         "jenssegers/agent": "*",
         "phpunit/phpunit": "4.1.3",
-        "fzaninotto/faker": "1.3.*@dev",
-        "cloudinary/cloudinary_php": "dev-master",
-        "teepluss/cloudinary": "dev-master"
+        "fzaninotto/faker": "1.3.*@dev"
     },
     "autoload": {
         "classmap": [

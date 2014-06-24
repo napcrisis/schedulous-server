@@ -123,8 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
         'Way\Generators\GeneratorsServiceProvider',
-        'Jenssegers\Agent\AgentServiceProvider',
-        'Teepluss\Cloudinary\CloudinaryServiceProvider'
+        'Jenssegers\Agent\AgentServiceProvider'
 	),
 
 	/*
@@ -196,7 +195,6 @@ return array(
         'PhoneNumberOfflineGeocoder' => 'libphonenumber\geocoding\PhoneNumberOfflineGeocoder',
         'Carbon' => 'Carbon\Carbon',
         'Agent' => 'Jenssegers\Agent\Facades\Agent',
-        'Cloudy' => 'Teepluss\Cloudinary\Facades\Cloudy'
 	),
 
 );
