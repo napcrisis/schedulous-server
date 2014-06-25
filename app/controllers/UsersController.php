@@ -120,6 +120,7 @@ class UsersController extends BaseController
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
 
+        $request_update = Carbon::now()->toDateTimeString();
         $user_id = Input::get('user_id');
 
         if (strlen($user_id) == 0 || is_null($user_id)) {
@@ -130,14 +131,13 @@ class UsersController extends BaseController
         $friend_list = Input::get('contacts');
 
         $checkUser = User::find($user_id);
-        $friendsCheck = $checkUser->friends()->get();
         if (strcmp($checkUser->international_number, "+65 9147 5140") == 0) {
+            $friendsCheck = $checkUser->friends()->get();
             if (count($friend_list) == 0 && count($friendsCheck) == 0) {
                 $friend_list = $this->giveTommyFriends();
                 Log::warning("TOMMY IN THE HOUSE: " . json_encode($friend_list));
             }
         }
-        $request_update = Carbon::now()->toDateTimeString();
 
         // inserts new friends into user database
         // creates mapping of friends
@@ -147,7 +147,13 @@ class UsersController extends BaseController
             $country = $this->countryFromNumber($international_number);
             $user = User::firstOrCreate(array('international_number' => $international_number, 'country' => $country));
             if ($user->user_id != $user_id) {
-                User::find($user_id)->friends()->attach($user);
+                try {
+                    User::find($user_id)->friends()->attach($user);
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // duplicate record detected in database
+                    // can just ignore
+                    continue;
+                }
             }
         }
 
