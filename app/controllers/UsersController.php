@@ -160,12 +160,12 @@ class UsersController extends BaseController
         skippedAdding:
         // retrieve verified users, these are the people who are already on schedulous
         $user = User::find($user_id);
-        $friend_list = $user->friends()->get(array('international_number', 'registered'));
+        $friend_list = $user->friends()->get(array('international_number', 'registered', 'user_id'));
         $registered = array();
         foreach ($friend_list as $friend) {
             $check_reg = $friend->registered;
             if (strcmp($check_reg, 'yes')) {
-                array_push($registered, $friend->international_number);
+                array_push($registered, [$friend->international_number => $friend->user_id]);
             }
         }
 
