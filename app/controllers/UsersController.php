@@ -84,7 +84,7 @@ class UsersController extends BaseController
 
     public function postUpdateUser()
     {
-        $method_name = '[user] update-name';
+        $method_name = '[user] update-user';
         Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
@@ -101,16 +101,6 @@ class UsersController extends BaseController
         Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
 
         return $status;
-    }
-
-    public function postUpdatePic()
-    {
-        $method_name = '[user] update-pic';
-        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
-        Log::info('[' . Request::getClientIp() . '] ');
-        Log::info(json_encode(Input::all()));
-
-        //$picture = Input::get('picture');
     }
 
     public function postSyncPhonebook()

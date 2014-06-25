@@ -85,4 +85,28 @@ class GroupsController extends BaseController
         return $result;
     }
 
+    public function postUpdateGroup()
+    {
+        $method_name = '[user] update-group';
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
+        Log::info(json_encode(Input::all()));
+
+        $user_id = Input::get('user_id');
+        $group_id = Input::get('group_id');
+        $group_name = Input::get('group_name');
+        $url = Input::get('url');
+
+        $group = Group::where('group_id', '=', $group_id)
+            ->update(array('group_name' => $group_name, 'group_pic_url' => $url));
+        if (count($group) == 1) {
+            $status = array("status" => "success");
+        } else {
+            $status = array("status" => "fail");
+        }
+
+        Log::info(json_encode($status));
+        Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
+    }
+
 }
