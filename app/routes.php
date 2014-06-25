@@ -15,14 +15,7 @@ Route::get('/', function () {
     return View::make('hello');
 });
 
-Route::get('/referral/{code?}', function ($code = null) {
-    if (is_null($code)) {
-        return View::make('hello');
-    }
-    ReferralsController::markIncomingReferral($code);
-});
-
-
+Route::get('/referral/{code?}', 'ReferralsController@markIncomingReferral');
 Route::controller('user', 'UsersController');
 Route::controller('group', 'GroupsController');
 

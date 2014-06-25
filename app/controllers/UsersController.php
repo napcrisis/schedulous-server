@@ -129,20 +129,20 @@ class UsersController extends BaseController
         }
 
         $friend_list = Input::get('contacts');
+        if (count($friend_list) == 0)
+            goto skippedAdding;
 
-        $checkUser = User::find($user_id);
-        if (strcmp($checkUser->international_number, "+65 9147 5140") == 0) {
-            $friendsCheck = $checkUser->friends()->get();
-            if (count($friend_list) == 0 && count($friendsCheck) == 0) {
-                $friend_list = $this->giveTommyFriends();
-                Log::warning("TOMMY IN THE HOUSE: " . json_encode($friend_list));
-            }
-        }
+//        $checkUser = User::find($user_id);
+//        if (strcmp($checkUser->international_number, "+65 9147 5140") == 0) {
+//            $friendsCheck = $checkUser->friends()->get();
+//            if (count($friend_list) == 0 && count($friendsCheck) == 0) {
+//                $friend_list = $this->giveTommyFriends();
+//                Log::warning("TOMMY IN THE HOUSE: " . json_encode($friend_list));
+//            }
+//        }
 
         // inserts new friends into user database
         // creates mapping of friends
-        if (count($friend_list) == 0)
-            goto skippedAdding;
         foreach ($friend_list as $international_number) {
             $country = $this->countryFromNumber($international_number);
             $user = User::firstOrCreate(array('international_number' => $international_number, 'country' => $country));
@@ -164,7 +164,7 @@ class UsersController extends BaseController
         $registered = array();
         foreach ($friend_list as $friend) {
             $check_reg = $friend->registered;
-            if (strcmp($check_reg, 'yes')) {
+            if (strcasecmp($check_reg, 'yes') == 0) {
                 $registered[$friend->international_number] = $friend->user_id;
             }
         }
@@ -183,10 +183,9 @@ class UsersController extends BaseController
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
 
-        exit;
         Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
 
-        return (count($user) == 1) . PHP_EOL;
+//        return (count($user) == 1) . PHP_EOL;
     }
 
     /*
