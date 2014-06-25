@@ -172,7 +172,39 @@ class UsersController extends BaseController
         $result = array('status' => 'success', "registered" => $registered, 'last_updated' => $request_update);
         Log::info(json_encode($result));
         Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
+        return $result;
+    }
 
+    public function postRetrieveInfo()
+    {
+        $method_name = '[user] retrieve-info';
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
+        Log::info(json_encode(Input::all()));
+
+        $result = array();
+
+        $user_id_array = Input::get('user_id');
+        if (!is_array($user_id_array)) {
+            $result = array('status' => 'fail', 'message' => 'invalid entry');
+            Log::info(json_encode($result));
+            return $result;
+        }
+
+        $user_list = array();
+        foreach ($user_id_array as $user_id) {
+            $user = User::find($user_id);
+            unset($user['user_id']);
+            unset($user['country']);
+            unset($user['referral_code']);
+            unset($user['xmpp']);
+            $user_list[$user_id] = $user;
+        }
+
+        $result = $user_list;
+        $result['status'] = 'success';
+        Log::info(json_encode($result));
+        Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
         return $result;
     }
 

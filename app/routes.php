@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return View::make('hello');
+    return View::make('index');
 });
 
 Route::get('/referral/{code?}', 'ReferralsController@markIncomingReferral');

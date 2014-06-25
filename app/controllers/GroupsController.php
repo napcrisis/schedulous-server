@@ -12,9 +12,8 @@ class GroupsController extends BaseController
         $group_name = Input::get('group_name');
         $user_id = Input::get('user_id');
 
-        $group_members = Input::get('group_members');
-        $registered = $group_members['registered'];
-        $non_registered = $group_members['non_registered'];
+        $registered = Input::get('registered');
+        $non_registered = Input::get('non_registered');
 
         // create group record
         $group = Group::create(array('group_name' => $group_name, 'user_id' => $user_id));
@@ -30,8 +29,6 @@ class GroupsController extends BaseController
             array_push($filtered_non_reg, $number);
         }
 
-//        echo json_encode($registered) . PHP_EOL;
-
         // create account for non-registered
         // push their user_id to registered array
         foreach ($filtered_non_reg as $international_number) {
@@ -44,27 +41,48 @@ class GroupsController extends BaseController
             array_push($registered, $user->user_id);
         }
 
-        // push creator's user_id to registered array
-        array_push($registered, $user_id);
-//        echo json_encode($registered) . PHP_EOL;
-
         // add registered users to group_users table
         foreach ($registered as $user_id) {
-            //$member = GroupUser::create(array('group_id' => $group->group_id, 'user_id' => $user_id));
-            //echo json_encode($member) . PHP_EOL;
-            Group::find($group->group_id)->group_user()->attach($user_id);
+            Group::find($group->group_id)->members()->attach($user_id);
         }
 
-//        $members = GroupUser::all();
-//        echo json_encode($members) . PHP_EOL;
-
-        $group = Group::find($group->group_id);
-        $group_members = $group->group_user()->get(array('users.user_id', 'users.profile_pic_url', 'users.international_number', 'users.name'));
-
-        $result = array('group' => $group, 'members' => $group_members);
-        echo json_encode($result) . PHP_EOL;
+        $result = array('status' => 'success', 'group_id' => $group->group_id);
+        Log::info(json_encode($result));
         Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
-        return null;
-
+        return $result;
     }
+
+    public function postList()
+    {
+        $method_name = '[group] list';
+        Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
+        Log::info('[' . Request::getClientIp() . '] ');
+        Log::info(json_encode(Input::all()));
+
+        $user_id = Input::get('user_id');
+
+        $user = User::find($user_id);
+        $grouplist = $user->groups()->get(array('groups.group_id', 'group_name', 'group_pic_url'));
+        $user_group = array();
+        foreach ($grouplist as $group) {
+            $groupmembers = Group::find($group->group_id)->members()->get(array('group_users.user_id'));
+            $members = array();
+            foreach ($groupmembers as $person) {
+                array_push($members, $person->user_id);
+            }
+            $group_obj = array(
+                'group_id' => $group->group_id,
+                'group_name' => $group->group_name,
+                'group_pic_url' => $group->group_pic_url,
+                'members' => $members
+            );
+            array_push($user_group, $group_obj);
+        }
+
+        $result = array("status" => "success", "groups" => $user_group);
+        Log::info(json_encode($result));
+        Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
+        return $result;
+    }
+
 }

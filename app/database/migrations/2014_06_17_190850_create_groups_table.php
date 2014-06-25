@@ -17,7 +17,7 @@ class CreateGroupsTable extends Migration {
 			$table->increments('group_id');
             $table->integer('user_id')->unsigned();
             $table->string('group_name');
-            $table->string('group_pic')->nullable();
+            $table->string('group_pic_url')->nullable();
             $table->softDeletes();
 			$table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users');
