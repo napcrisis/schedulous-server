@@ -19,6 +19,7 @@ class ReferralsController extends BaseController
             $referral = Referral::create(array('ip_address' => $ip_address, 'user_agent' => $user_agent,
                 'referral_code' => $code, 'user_id' => $user_id));
             User::find($user_id)->referrals()->save($referral);
+            echo "you have used " . $code . '<br>';
         }
 
         // download apk file

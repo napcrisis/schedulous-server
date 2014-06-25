@@ -100,6 +100,11 @@ class ExampleTest extends TestCase
         echo json_encode(User::find($user_id)) . PHP_EOL;
         echo "====== Verifying User Completed ======" . PHP_EOL . PHP_EOL;
 
+        echo "====== User Referral ======" . PHP_EOL;
+        $this->UserReferral($user_id);
+        echo json_encode(User::find($user_id)->referrals()) . PHP_EOL;
+        echo "====== User Referral Completed ======" . PHP_EOL . PHP_EOL;
+
         echo "====== Sync Phonebook ======" . PHP_EOL;
         $this->SyncPhonebook($user_id);
         echo "====== Sync Phonebook Completed ======" . PHP_EOL . PHP_EOL;
@@ -161,6 +166,15 @@ class ExampleTest extends TestCase
 
         echo json_encode($result) . PHP_EOL;
         return $result;
+    }
+
+    public function UserReferral($user_id)
+    {
+        $user = User::find($user_id);
+        $referral_code = $user->referral_code;
+        $response = $this->call('GET', '/referral/' . $referral_code);
+        echo json_encode($response->getContent()) . PHP_EOL;
+
     }
 
     // Test 2 - Group Creation
