@@ -12,11 +12,14 @@ class ReferralsController extends BaseController
         // record user_id
         $ip_address = Request::getClientIp();
         $user_agent = Agent::getUserAgent() . '<br><br>';
-        $user_id = User::where('referral_code', '=', $code)->get(array('user_id'))[0]->user_id;
+        $user_id = User::where('referral_code', '=', $code)->get(array('user_id'));
 
-        $referral = Referral::create(array('ip_address' => $ip_address, 'user_agent' => $user_agent,
-            'referral_code' => $code, 'user_id' => $user_id));
-        User::find($user_id)->referrals()->save($referral);
+        if (is_null($user_id) != 0) {
+            $user_id = $user_id[0]->user_id;
+            $referral = Referral::create(array('ip_address' => $ip_address, 'user_agent' => $user_agent,
+                'referral_code' => $code, 'user_id' => $user_id));
+            User::find($user_id)->referrals()->save($referral);
+        }
 
         // download apk file
         $filename = 'schedulous_alpha.apk';
