@@ -13,8 +13,9 @@
 
 App::before(function ($request) {
     $request_uri = $request->getRequestUri();
+    Log::info('[' . Request::getClientIp() . '] ' . $request->url());
+
     //$input = Input::all();
-    //Log::info('[' . Request::getClientIp() . '] ' . $request->url() . ' ' . json_encode($input));
 });
 
 
