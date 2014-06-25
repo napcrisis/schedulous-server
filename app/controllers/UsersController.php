@@ -165,7 +165,7 @@ class UsersController extends BaseController
         foreach ($friend_list as $friend) {
             $check_reg = $friend->registered;
             if (strcmp($check_reg, 'yes')) {
-                array_push($registered, [$friend->international_number => $friend->user_id]);
+                $registered[$friend->international_number] = $friend->user_id;
             }
         }
 
