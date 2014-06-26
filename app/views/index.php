@@ -127,16 +127,17 @@
         <div class="container">
 
             <!-- ONLY LOGO ON HEADER -->
-            <div class="only-logo">
+            <!--<div class="only-logo">
                 <div class="navbar">
                     <div class="navbar-header">
                         <img src="images/logo-nav.png" alt="">
                     </div>
                 </div>
-            </div>
+            </div>-->
             <!-- /END ONLY LOGO ON HEADER -->
 
             <div class="row home-contents">
+                <br>
                 <div class="col-md-6 col-sm-6">
 
                     <!-- HEADING AND BUTTONS -->
