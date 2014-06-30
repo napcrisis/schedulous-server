@@ -181,18 +181,15 @@ class UsersController extends BaseController
             return $result;
         }
 
+        $users_array = array();
         $user_list = array();
         foreach ($user_id_array as $user_id) {
             $user = User::find($user_id);
-            unset($user['user_id']);
-            unset($user['country']);
-            unset($user['referral_code']);
-            unset($user['xmpp']);
-            $user_list[$user_id] = $user;
+            unset($user['country'], $user['referral_code'], $user['xmpp']);
+            array_push($users_array, $user);
         }
 
-        $result = $user_list;
-        $result['status'] = 'success';
+        $result = array('status' => 'success', 'users' => $users_array);
         Log::info(json_encode($result));
         Log::info('===== END OF ' . strtoupper($method_name) . '  =====');
         return $result;
