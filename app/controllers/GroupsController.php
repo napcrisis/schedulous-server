@@ -13,14 +13,14 @@ class GroupsController extends BaseController
         $user_id = Input::get('user_id');
 
         $registered = Input::get('registered');
-        $non_registered = Input::get('non_registered');
+        $unregistered = Input::get('unregistered');
 
         // create group record
         $group = Group::create(array('group_name' => $group_name, 'user_id' => $user_id));
 
-        // check if non_registered users are existing registered users
+        // check if unregistered users are existing registered users
         $filtered_non_reg = array();
-        foreach ($non_registered as $number) {
+        foreach ($unregistered as $number) {
             $user = User::where('international_number', '=', $number)->get();
             if (count($user) == 1) {
                 array_push($registered, $user[0]->user_id);
