@@ -14,7 +14,7 @@
 App::before(function ($request) {
     $request_uri = $request->getRequestUri();
     Log::info('[' . Request::getClientIp() . '] ' . $request->url());
-    Log::info('env ' . App::environment());
+//    Log::info('env ' . App::environment());
     //$input = Input::all();
 });
 
