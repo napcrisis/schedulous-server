@@ -24,13 +24,23 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+//$env = $app->detectEnvironment(array(
+//
+//    'local' => array('a', 'Hector*', 'hector*'),
+//    'staging' => array('staging'),
+//    'production' => array('production'),
+//
+//));
 
-    'local' => array('a', 'Hector*', 'hector*'),
-    'staging' => array('staging'),
-    'production' => array('production'),
-
-));
+$env = $app->detectEnvironment(function () use ($app) {
+    if (strcmp(getenv('APPLICATION_ENV'), 'local') == 0) {
+        return 'local';
+    } else if (strcmp(getenv('APPLICATION_ENV'), 'staging') == 0) {
+        return 'staging';
+    } else {
+        return 'production';
+    }
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +53,7 @@ $env = $app->detectEnvironment(array(
 |
 */
 
-$app->bindInstallPaths(require __DIR__.'/paths.php');
+$app->bindInstallPaths(require __DIR__ . '/paths.php');
 
 /*
 |--------------------------------------------------------------------------
@@ -56,10 +66,10 @@ $app->bindInstallPaths(require __DIR__.'/paths.php');
 |
 */
 
-$framework = $app['path.base'].
-                 '/vendor/laravel/framework/src';
+$framework = $app['path.base'] .
+    '/vendor/laravel/framework/src';
 
-require $framework.'/Illuminate/Foundation/start.php';
+require $framework . '/Illuminate/Foundation/start.php';
 
 /*
 |--------------------------------------------------------------------------
