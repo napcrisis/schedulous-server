@@ -41,6 +41,9 @@ class GroupsController extends BaseController
             array_push($registered, $user->user_id);
         }
 
+        // push creator into group_user table also
+        array_push($registered, $user_id);
+
         // add registered users to group_users table
         foreach ($registered as $user_id) {
             Group::find($group->group_id)->members()->attach($user_id);
