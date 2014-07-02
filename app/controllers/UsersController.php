@@ -174,7 +174,7 @@ class UsersController extends BaseController
 
         $result = array();
 
-        $user_id_array = Input::get('auth.user_id');
+        $user_id_array = Input::get('user_id');
         if (!is_array($user_id_array)) {
             $result = array('status' => 'fail', 'message' => 'invalid entry');
             Log::info(json_encode($result));
