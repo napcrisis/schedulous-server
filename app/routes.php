@@ -16,8 +16,10 @@ Route::get('/', function () {
 });
 
 Route::get('/referral/{code?}', 'ReferralsController@markIncomingReferral');
-Route::controller('user', 'UsersController');
-Route::controller('group', 'GroupsController');
+Route::group(array('before' => 'authRequest'), function () {
+    Route::controller('user', 'UsersController');
+    Route::controller('group', 'GroupsController');
+});
 
 /*
 Route::group(array('prefix' => ''), function () {

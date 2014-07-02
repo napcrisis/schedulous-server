@@ -44,6 +44,24 @@ Route::filter('auth', function () {
     }
 });
 
+Route::filter('authRequest', function () {
+    $request_uri = Request::getRequestUri();
+    Log::info($request_uri);
+    if (strcmp($request_uri, '/user/register') == 0 || strcmp($request_uri, '/user/verify') == 0) {
+        // do nothing
+    } else {
+        $user_id = Input::get('auth.user_id');
+        $session_id = Input::get('auth.session_id');
+        $count = Login::where('user_id', '=', $user_id)->where('session_id', '=', $session_id)->get()->count();
+        Log::warning($count);
+        if ($count == 1) {
+            // do nothing
+        } else {
+            $error = array('status' => 'failed', 'message' => 'invalid auth');
+            return Response::make($error, 401); //
+        }
+    }
+});
 
 Route::filter('auth.basic', function () {
     return Auth::basic();
