@@ -65,7 +65,7 @@ class GroupsController extends BaseController
         $user_id = Input::get('auth.user_id');
 
         $user = User::find($user_id);
-        $grouplist = $user->groups()->get(array('groups.group_id', 'group_name', 'group_pic_url'));
+        $grouplist = $user->groups()->get(array('groups.user_id', 'groups.group_id', 'group_name', 'group_pic_url'));
         $user_group = array();
         foreach ($grouplist as $group) {
             $groupmembers = Group::find($group->group_id)->members()->get(array('group_users.user_id'));
@@ -77,7 +77,8 @@ class GroupsController extends BaseController
                 'group_id' => $group->group_id,
                 'group_name' => $group->group_name,
                 'group_pic_url' => $group->group_pic_url,
-                'members' => $members
+                'members' => $members,
+                'creator_id' => $group->user_id
             );
             array_push($user_group, $group_obj);
         }
