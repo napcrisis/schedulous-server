@@ -88,7 +88,7 @@ class UsersController extends BaseController
         Log::info('===== START OF ' . strtoupper($method_name) . '  =====');
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
-        $user_id = Input::get('user_id');
+        $user_id = Input::get('auth.user_id');
         $name = Input::get('name');
         $profile_pic = Input::get('profile_pic_url');
         $user = User::where('id', '=', $user_id)->update(array('name' => $name, 'profile_pic' => $profile_pic));
@@ -111,7 +111,7 @@ class UsersController extends BaseController
         Log::info(json_encode(Input::all()));
 
         $request_update = Carbon::now()->toDateTimeString();
-        $user_id = Input::get('user_id');
+        $user_id = Input::get('auth.user_id');
 
         if (strlen($user_id) == 0 || is_null($user_id)) {
             $result = array('status' => 'fail', "message" => "no user_id", 'last_updated' => $request_update);
@@ -174,7 +174,7 @@ class UsersController extends BaseController
 
         $result = array();
 
-        $user_id_array = Input::get('user_id');
+        $user_id_array = Input::get('auth.user_id');
         if (!is_array($user_id_array)) {
             $result = array('status' => 'fail', 'message' => 'invalid entry');
             Log::info(json_encode($result));

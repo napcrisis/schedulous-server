@@ -10,7 +10,7 @@ class GroupsController extends BaseController
         Log::info(json_encode(Input::all()));
 
         $group_name = Input::get('group_name');
-        $user_id = Input::get('user_id');
+        $user_id = Input::get('auth.user_id');
 
         $registered = Input::get('registered');
         $unregistered = Input::get('unregistered');
@@ -59,7 +59,7 @@ class GroupsController extends BaseController
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
 
-        $user_id = Input::get('user_id');
+        $user_id = Input::get('auth.user_id');
 
         $user = User::find($user_id);
         $grouplist = $user->groups()->get(array('groups.group_id', 'group_name', 'group_pic_url'));
@@ -92,7 +92,7 @@ class GroupsController extends BaseController
         Log::info('[' . Request::getClientIp() . '] ');
         Log::info(json_encode(Input::all()));
 
-        $user_id = Input::get('user_id');
+        $user_id = Input::get('auth.user_id');
         $group_id = Input::get('group_id');
         $group_name = Input::get('group_name');
         $url = Input::get('url');
