@@ -47,6 +47,7 @@ Route::filter('auth', function () {
 Route::filter('authRequest', function () {
     $request_uri = Request::getRequestUri();
     Log::info($request_uri);
+    Log::warning(Input::get('auth'));
     if (strcmp($request_uri, '/user/register') == 0 || strcmp($request_uri, '/user/verify') == 0) {
         // do nothing
     } else {
