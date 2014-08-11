@@ -19,14 +19,14 @@ class SMSGateway
         $api_key = Config::get('telerivet/telerivet.api_key');
         $project_id = Config::get('telerivet/telerivet.project_id');
         $phone_id = Config::get('telerivet/telerivet.phone_id');
-
+        $content = 'Schedulous code: ' . $verification_code;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL,
             "https://api.telerivet.com/v1/projects/$project_id/messages/outgoing");
         curl_setopt($curl, CURLOPT_USERPWD, "{$api_key}:");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array(
-            'content' => $verification_code,
+            'content' => $content,
             'phone_id' => $phone_id,
             'to_number' => $international_number,
         ), '', '&'));
